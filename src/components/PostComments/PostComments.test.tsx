@@ -1,6 +1,15 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import PostComment from '.';
 
+const addComment = (text) => {
+  fireEvent.change(screen.getByTestId('comment-textarea'), {
+    target: {
+      value: text,
+    },
+  });
+  fireEvent.click(screen.getByTestId('comment-button'));
+};
+
 describe('PostComment Test', () => {
   it('Should render correctly', () => {
     render(<PostComment />);
@@ -10,19 +19,8 @@ describe('PostComment Test', () => {
   it('Should add 2 comments to the list', () => {
     render(<PostComment />);
 
-    fireEvent.change(screen.getByTestId('comment-textarea'), {
-      target: {
-        value: 'First comment added through tests',
-      },
-    });
-    fireEvent.click(screen.getByTestId('comment-button'));
-
-    fireEvent.change(screen.getByTestId('comment-textarea'), {
-      target: {
-        value: 'Second comment added through tests',
-      },
-    });
-    fireEvent.click(screen.getByTestId('comment-button'));
+    addComment('First comment added through tests');
+    addComment('Second comment added through tests');
 
     expect(screen.getAllByTestId('post-comment-element')).toHaveLength(2);
   });
